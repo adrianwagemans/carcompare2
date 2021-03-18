@@ -1,20 +1,21 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu} = require('electron')
 const { url } = require('inspector')
 const path = require('path')
+const { title } = require('process')
 
 function createWindow () {
   // Create the browser window.
   const mainWindow1 = new BrowserWindow({
-    width: 400,
-    height: 600,
+    width: 1600,
+    height: 1200,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
   const mainWindow2 = new BrowserWindow({
-    width: 400,
-    height: 600,
+    width: 600,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -28,8 +29,31 @@ function createWindow () {
 
   mainWindow1.webContents.on('did-navigate-in-page', event =>{
     mainWindow2.loadURL((contents.getURL()).replace('cy=D', 'cy=E'))
+    mainWindow2.setTitle("This window is gonna render after changes of the other")
+    mainWindow1.setTitle("Navigate this window")
   })
- 
+
+
+  mainWindow1.webContents.on('did-finish-load', ()=>{
+    mainWindow1.setTitle("Navigate this window")
+  })
+
+  mainWindow2.webContents.on('did-finish-load', ()=>{
+    mainWindow2.setTitle("This window is gonna render after changes of the other")
+  })
+
+
+  //menu
+
+  const template = [
+    {
+      label: 'Go back'
+     
+    },
+  ]
+  const menu = Menu.buildFromTemplate(template)
+
+ Menu.setApplicationMenu(menu)
 }
 
 // This method will be called when Electron has finished
