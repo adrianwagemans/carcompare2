@@ -1,11 +1,19 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
+const { url } = require('inspector')
 const path = require('path')
 
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
+  const mainWindow1 = new BrowserWindow({
+    width: 400,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
+  const mainWindow2 = new BrowserWindow({
+    width: 400,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -13,10 +21,15 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
-
+  mainWindow1.loadURL('https://www.autoscout24.es/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=D&kmto=150000&fregto=2016&fregfrom=2009&atype=C&')
+  mainWindow2.loadURL('https://www.autoscout24.es/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=E&kmto=150000&fregto=2016&fregfrom=2009&atype=C&')
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  const contents = mainWindow1.webContents
+
+  mainWindow1.webContents.on('did-navigate-in-page', event =>{
+    mainWindow2.loadURL((contents.getURL()).replace('cy=D', 'cy=E'))
+  })
+ 
 }
 
 // This method will be called when Electron has finished
@@ -24,6 +37,7 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
+
   
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
