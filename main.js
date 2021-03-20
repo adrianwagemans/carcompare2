@@ -21,9 +21,16 @@ function createWindow () {
     }
   })
 
+
+  let language = 'es'
+
   // and load the index.html of the app.
-  mainWindow1.loadURL('https://www.autoscout24.es/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=D&kmto=150000&fregto=2016&fregfrom=2009&atype=C&')
-  mainWindow2.loadURL('https://www.autoscout24.es/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=E&kmto=150000&fregto=2016&fregfrom=2009&atype=C&')
+  const reload = () => { mainWindow1.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=D&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
+  
+  
+                         mainWindow2.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=E&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
+}
+  reload();
   // Open the DevTools.
   const contents = mainWindow1.webContents
 
@@ -46,10 +53,54 @@ function createWindow () {
   //menu
 
   const template = [
-    {
-      label: 'Go back'
+    { 
+      label: 'Go back',
+      click: ()=>{
+        contents.goBack();
+      }
      
     },
+    {
+      label: 'Language',
+      submenu: [
+        {label: 'Español',
+        click: () => {
+          language = 'es'
+          reload();
+          
+
+        }},
+        {label: 'English',
+        click: () => {
+          language = 'com'
+          reload();
+
+
+
+        }},
+        {label: 'Deutsche',
+        click: () => {
+          language = 'de'
+          reload();
+
+
+        }},
+        {label: 'Český',
+        click: () => {
+          language = 'cz'
+          reload();
+
+
+        }},
+        {label: 'Polskie',
+        click: () => {
+          language = 'pl'
+          reload();
+
+
+        }}
+      ]
+    }
   ]
   const menu = Menu.buildFromTemplate(template)
 
