@@ -37,14 +37,14 @@ function createWindow () {
  let menuCountry1 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'], 
                      ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
                      ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'],
-                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"]
+                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
                      ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
 
 
  let menuCountry2 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'],
                      ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
                      ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'], 
-                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"]
+                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
                      ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
 
   let helpLabel = ['ayuda', 'Hilfe', 'help', 'aider', 'helpen' ]
@@ -69,7 +69,7 @@ function createWindow () {
   'Vergelijkbare autoprijzen in verschillende Europese landen, gebruik gewoon de autoscout 24-interface om je zoekopdracht te filteren en je ziet' +
   'direct de vergelijking met het gekozen land`]]
 
-  let chosenCountryMenu = menuCountry1[0]
+  let chosenCountryMenu = menuCountry1[1]
 
 
 
@@ -117,34 +117,51 @@ function createWindow () {
           label: 'Español',
           click: () => {
              language = 'es'
+             chosenCountryMenu = menuCountry1[0]
+              menu = Menu.buildFromTemplate(template, chosenCountryMenu )
+
+              Menu.setApplicationMenu(menu)
+             
+
+
             reload();
       
          }
         },
+       
+        {label: 'Deutsche',
+        click: () => {
+          language = 'de'
+          chosenCountryMenu = menuCountry1[1]
+          
+
+          reload();
+
+
+        }},
         {
           label: 'English',
         click: () => {
           language = 'com'
-          reload();
+          chosenCountryMenu = menuCountry1[2]
+          
+            reload();
         }
       },
-        {label: 'Deutsche',
-        click: () => {
-          language = 'de'
-          reload();
 
-
-        }},
         {label: 'Frace',
         click: () => {
           language = 'fr'
+          chosenCountryMenu = menuCountry1[3]
           reload();
 
 
         }},
+        
         {label: 'Nederlands',
         click: () => {
           language = 'nl'
+          chosenCountryMenu = menuCountry1[4]
           reload();
 
 
@@ -154,49 +171,49 @@ function createWindow () {
     {
       label: 'look for cars in',
       submenu: [
-        {label: 'chosenCountryMenu[0]',
+        {label: chosenCountryMenu[0],
           click: ()=> {
             countrySearchChoice = countrySearch[0]
             reload();
             
           }
         },
-        {label: 'chosenCountryMenu[1]',
+        {label: chosenCountryMenu[1],
           click: ()=> {
             countrySearchChoice = countrySearch[1]
             reload();
             
           }
         },
-        {label: 'chosenCountryMenu[2]',
+        {label:chosenCountryMenu[2],
           click: ()=> {
             countrySearchChoice = countrySearch[2]
             reload();
             
           }
         },
-        {label: 'chosenCountryMenu[3]',
+        {label: chosenCountryMenu[3],
           click: ()=> {
             countrySearchChoice = countrySearch[3]
             reload();
             
           }
         },
-        {label: 'chosenCountryMenu[4]',
+        {label: chosenCountryMenu[4],
           click: ()=> {
             countrySearchChoice = countrySearch[4]
             reload();
             
           }
         },
-        {label: 'chosenCountryMenu[5]',
+        {label: chosenCountryMenu[5],
           click: ()=> {
             countrySearchChoice = countrySearch[5]
             reload();
             
           }
         },
-        {label:' chosenCountryMenu[6]',
+        {label: chosenCountryMenu[6],
           click: ()=> {
             countrySearchChoice = countrySearch[6]
             reload();
@@ -208,49 +225,49 @@ function createWindow () {
     {
       label: 'Compare in',
       submenu: [
-        {label: 'menuCountry2[0]',
+        {label: chosenCountryMenu[0],
           click: ()=> {
             countryCompareChoice = countrySearch[0]
             reload();
             
           }
         },
-        {label:' menuCountry2[1]',
+        {label: chosenCountryMenu[1],
           click: ()=> {
             countryCompareChoice = countrySearch[1]
             reload();
             
           }
         },
-        {label: 'menuCountry2[2]',
+        {label: chosenCountryMenu[2],
           click: ()=> {
             countryCompareChoice = countrySearch[2]
             reload();
             
           }
         },
-        {label: 'menuCountry2[3]',
+        {label: chosenCountryMenu[3],
           click: ()=> {
             countryCompareChoice = countrySearch[3]
             reload();
             
           }
         },
-        {label: 'menuCountry2[4]',
+        {label: chosenCountryMenu[4],
           click: ()=> {
             countryCompareChoice = countrySearch[4]
             reload();
             
           }
         },
-        {label: 'menuCountry2[5]',
+        {label: chosenCountryMenu[5],
           click: ()=> {
             countryCompareChoice = countrySearch[5]
             reload();
             
           }
         },
-        {label: 'menuCountry2[6]',
+        {label:chosenCountryMenu[6],
           click: ()=> {
             countryCompareChoice = countrySearch[6]
             reload();
@@ -263,9 +280,9 @@ function createWindow () {
 
     
   ]
-  const menu = Menu.buildFromTemplate(template)
+    let menu = Menu.buildFromTemplate(template)
 
- Menu.setApplicationMenu(menu)
+    Menu.setApplicationMenu(menu)
 }
 
 // This method will be called when Electron has finished
@@ -274,6 +291,8 @@ function createWindow () {
 app.whenReady().then(() => {
   createWindow()
 
+
+  
   
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
