@@ -4,7 +4,51 @@ const { url } = require('inspector')
 const path = require('path')
 const { title } = require('process')
 
+
+// In some file from the main process
+// like main.js
+const { ipcMain } = require('electron')
+ipcMain.on('click', () => {  
+  createWindow()
+  
+} );
+
+ipcMain.on('request-mainprocess-action', (event, arg) => {
+
+  console.log(arg);
+})
+
+
+
+
+
+
+function createWindow1 () {
+
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        contextIsolation: false,
+      }
+    })
+  
+    // and load the index.html of the app.
+    mainWindow.loadFile('index.html')
+      console.log('dasdasdasd')
+  
+
+  
+}
+    
+
+
 function createWindow () {
+
+
   // Create the browser window.
   const mainWindow1 = new BrowserWindow({
     width: 1600,
@@ -13,6 +57,8 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js')
     }
   })
+
+ 
   const mainWindow2 = new BrowserWindow({
     width: 600,
     height: 800,
@@ -118,7 +164,7 @@ function createWindow () {
           click: () => {
              language = 'es'
              chosenCountryMenu = menuCountry1[0]
-              menu = Menu.buildFromTemplate(template, chosenCountryMenu )
+              menu = Menu.buildFromTemplate(template)
 
               Menu.setApplicationMenu(menu)
              
@@ -285,11 +331,13 @@ function createWindow () {
     Menu.setApplicationMenu(menu)
 }
 
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow()
+  createWindow1()
 
 
   
