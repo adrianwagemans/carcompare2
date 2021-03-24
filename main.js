@@ -1,9 +1,9 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu} = require('electron')
+const {app, BrowserWindow, Menu, webContents} = require('electron')
 const { url } = require('inspector')
 const path = require('path')
 const { title } = require('process')
-const { dialog } = require('electron')
+const { dialog, remote} = require('electron')
 
 
 
@@ -11,7 +11,16 @@ const { dialog } = require('electron')
 
 const { ipcMain } = require('electron')
 ipcMain.on('click', () => {  
-  setTimeout(function(){createWindow()}, 300)
+
+  
+  setTimeout(function(){
+    
+   setTimeout(function() {win1.close()},200)
+    createWindow()
+   
+  
+  }, 200)
+
 
 
   
@@ -93,8 +102,9 @@ let win2mens = ''
 let helpTag= ''
 let helpDescription = ''
 let backTag = ''
-let findCarsTag = '11'
-let compareCars = '11'
+let findCarsTag = ''
+let compareCars = ''
+let win1 = ''
 
 
   ipcMain.on('request-mainprocess-action', (event, arg) => {
@@ -119,12 +129,17 @@ let compareCars = '11'
 
     compareCars = menu[2][arg[1]]
 
-console.log(compareCars)
-console.log(findCarsTag)
+
   }
   )
 
 
+let autoWin1 = ''
+
+
+  //translatePage
+
+ 
 
 //help popUp
 
@@ -161,6 +176,7 @@ function createWindow1 () {
     let menu = Menu.buildFromTemplate(template)
 
     Menu.setApplicationMenu(menu)
+    win1 = mainWindow
 
 
       
@@ -190,8 +206,16 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js')
     }
   })
+  const translatePage = () => {
+  let html1 = mainWindow1.webContents.on('did-finish-load', async () => {
+    mainWindow1.webContents.savePage('./HTMLtranslate.html', 'HTMLonly').then(() => {
+      console.log('Page was saved successfully.')
+    }).catch(err => {
+      console.log(err)
+    })
+  })
 
-
+}
   
   
   
@@ -201,8 +225,8 @@ function createWindow () {
   
   
                          mainWindow2.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=${countryCompareChoice}&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
-}
-  reload();
+                        }
+        reload();
   
   const contents = mainWindow1.webContents
 
@@ -342,6 +366,13 @@ function createWindow () {
         }
       ]
     },
+    {
+      label: 'translate page',
+      click: ()=>{
+        translatePage();
+
+      } 
+       },
     {
      label: helpTag,
      click : ()=>{
