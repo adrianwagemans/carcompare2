@@ -1,5 +1,70 @@
+body {
+  background-image: url('./images/europe-413102_1920.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: blue;
+}
+
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
+  background-color: #ffffff;
+  opacity: 0.8;
+  position: relative;
+  top: 150px;
+}
+
+h1 {
+  text-align: center;
+  margin: 150px 0;
+  color: whitesmoke;
+  font-size: 50px;
+  position: relative;
+  top: 100px;
+}
+
+h3 {
+  color: black;
+}
+
+.flag {
+  border-radius: 5px;
+  margin: 25px 2px;
+}
+
+#es {
+  max-width: 400px;
+  height: 75px;
+  background-image: url('./images/spain-162428_640.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#de {
+  max-width: 400px;
+  height: 75px;
+  background-image: url('./images/germany-31017_640.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#com {
+  max-width: 400px;
+  height: 75px;
+  background-image: url('./images/england-2906827_640.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#fr {
+  max-width: 400px;
+  height: 75px;
+  background-image: url('./images/france-28463_640.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#nl {
+  max-width: 400px;
+  height: 75px;
+  background-image: url('./images/netherlands-162372_640.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 }

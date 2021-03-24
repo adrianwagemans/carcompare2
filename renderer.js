@@ -9,7 +9,7 @@ const { ipcRenderer } = require('electron');
             // Some data that will be sent to the main process
             
 
-        let languages = ["espanol",'english','french', 'nl'];
+        let languages = ['es','de','com','fr','nl'];
         
         
         
@@ -21,7 +21,7 @@ const { ipcRenderer } = require('electron');
 
             btn.addEventListener('click', () => {
 
-                let Data = languages[i]
+                let Data =  [languages[i], i]
                 ipcRenderer.send('click' );
                 ipcRenderer.send('request-mainprocess-action', Data)
               });

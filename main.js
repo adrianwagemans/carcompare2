@@ -3,21 +3,139 @@ const {app, BrowserWindow, Menu} = require('electron')
 const { url } = require('inspector')
 const path = require('path')
 const { title } = require('process')
+const { dialog } = require('electron')
 
 
-// In some file from the main process
-// like main.js
+
+//event click from welcome page
+
 const { ipcMain } = require('electron')
 ipcMain.on('click', () => {  
-  createWindow()
+  setTimeout(function(){createWindow()}, 300)
+
+
+  
   
 } );
 
-ipcMain.on('request-mainprocess-action', (event, arg) => {
 
-  console.log(arg);
-})
 
+//options language menu, and tittle
+
+let countrySearch = ['D','F','I','E','NL','A','']
+
+
+  let countrySearchChoice = countrySearch[0]
+  let countryCompareChoice = countrySearch[3]
+
+
+
+
+
+ let win1Message = ['Navegar en esta pagina', 'Diese Seite durchsuchen', 'Browse this page', 'Parcourir cette page','Browse this page',  ]
+ let win2Message = ['Pagina espejo (no navegar)',  'Seite spiegeln (nicht durchsuchen)', 'Mirror page (dont browse)', 'Page miroir (ne pas parcourir)', 'Mirror page (dont browse)' ]
+
+
+ let  menu= [
+             ['Atras', 'Zurück', 'Go Back', 'Retour', 'Terug'],
+             ['Buscar autos en',"Autos finden in",'Find cars in','Trouver des voitures dans','Vind autos in'],
+             ['Comparar con','Vergleichen mit','Compare with','Comparer avec','Vergelijken met']
+            ]
+
+console.log(menu[0][0])
+
+
+ let menuCountry1 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'], 
+                     ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
+                     ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'],
+                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
+                     ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
+
+
+ let menuCountry2 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'],
+                     ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
+                     ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'], 
+                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
+                     ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
+
+  let helpLabel = ['ayuda', 'Hilfe', 'help', 'aider', 'helpen' ]
+
+  let help = ['Esta app le permitira buscar coches en un pais y realizar la misma busqueda en otro pais. esta pensada para comparar' + 
+  ' precios de autos similares en distintos paises de Europa, solo utilice la interfaz de autoscout 24 para filtrar su busqueda y vera '+ 
+  ' instantaneamente la comparacion con el pais elegido',
+
+  'Mit dieser App können Sie nach Autos in einem Land suchen und dieselbe Suche in einem anderen Land durchführen.' + 
+  'Es wurde entwickelt, um die Preise ähnlicher Autos in verschiedenen europäischen Ländern zu vergleichen. Verwenden Sie einfach die ' + 
+  'autoscout 24-Oberfläche, um Ihre Suche zu filtern, und Sie sehen sofort den Vergleich mit dem ausgewählten Land.',
+
+  'This app will allow you to search for cars in one country and carry out the same search in another country. It is designed to compare '+
+  'Similar car prices in different European countries, just use the autoscout 24 interface to filter your search and you will see' +
+  'instantly the comparison with the chosen country',
+
+  `Cette application vous permettra de rechercher des voitures dans un pays et d'effectuer la même recherche dans un autre pays. Il est conçu pour comparer '+
+  'Prix de voitures similaires dans différents pays européens, utilisez simplement l'interface autoscout 24 pour filtrer votre recherche et vous verrez' +
+  'instantanément la comparaison avec le pays choisi`,
+  
+  `Met deze app kun je naar auto's in het ene land zoeken en dezelfde zoekopdracht in een ander land uitvoeren. Het is ontworpen om '+
+  'Vergelijkbare autoprijzen in verschillende Europese landen, gebruik gewoon de autoscout 24-interface om je zoekopdracht te filteren en je ziet' +
+  'direct de vergelijking met het gekozen land`]
+
+
+
+
+  //language setting
+
+
+let language = ""
+let chosenCountryMenu = []
+let win1mens = ''
+let win2mens = ''
+let helpTag= ''
+let helpDescription = ''
+let backTag = ''
+let findCarsTag = '11'
+let compareCars = '11'
+
+
+  ipcMain.on('request-mainprocess-action', (event, arg) => {
+
+
+    language = arg[0]
+
+
+    chosenCountryMenu = menuCountry1[arg[1]]
+    
+    win1mens = win1Message[arg[1]]
+
+    win2mens = win2Message[arg[1]]
+
+    helpTag = helpLabel[arg[1]]
+
+    helpDescription =  help[arg[1]]
+
+    backTag = menu[0][arg[1]]
+
+    findCarsTag = menu[1][arg[1]]
+
+    compareCars = menu[2][arg[1]]
+
+console.log(compareCars)
+console.log(findCarsTag)
+  }
+  )
+
+
+
+//help popUp
+
+
+ const popUpShow = () => dialog.showMessageBox(null,  {message: helpDescription}, (response) => {
+  console.log(response);
+  console.log(compareCars)
+});
+  
+   
+  
 
 
 
@@ -25,7 +143,7 @@ ipcMain.on('request-mainprocess-action', (event, arg) => {
 
 function createWindow1 () {
 
-    // Create the browser window.
+    // Create the welcome window
     const mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
@@ -38,8 +156,14 @@ function createWindow1 () {
   
     // and load the index.html of the app.
     mainWindow.loadFile('index.html')
-      console.log('dasdasdasd')
-  
+
+    const template = []
+    let menu = Menu.buildFromTemplate(template)
+
+    Menu.setApplicationMenu(menu)
+
+
+      
 
   
 }
@@ -49,7 +173,7 @@ function createWindow1 () {
 function createWindow () {
 
 
-  // Create the browser window.
+  // Create the principal windows
   const mainWindow1 = new BrowserWindow({
     width: 1600,
     height: 1200,
@@ -68,59 +192,11 @@ function createWindow () {
   })
 
 
-  let language = 'es'
-
   
-  let countrySearch = ['D','F','I','E','NL','A','']
-  let countrySearchChoice = countrySearch[0]
-  let countryCompareChoice = countrySearch[3]
-
- let win1Message = ['Navegar en esta pagina', 'Diese Seite durchsuchen', 'Browse this page', 'Parcourir cette page','Browse this page',  ]
- let win2Message = ['Pagina espejo (no navegar)',  'Seite spiegeln (nicht durchsuchen)', 'Mirror page (dont browse)', 'Page miroir (ne pas parcourir)', 'Mirror page (dont browse)' ]
- let  menuBack = ['Atras', 'Zurück', 'Go Back', 'Retour', 'Terug']
-
-
- let menuCountry1 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'], 
-                     ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
-                     ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'],
-                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
-                     ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
-
-
- let menuCountry2 = [['Alemania', 'Francia', 'Italia', 'Espana', 'Holanda','austria','Europa'],
-                     ['Deutschland', 'Frankreich', 'Italien', 'Spanien', 'Holland', 'Österreich', 'Europa'],
-                     ['Germany', 'France', 'Italy', 'Spain', 'Netherlands', 'Austria', 'Europe'], 
-                     ["Allemagne", "France", "Italie", "Espagne", "Hollande", "Autriche", "Europe"],
-                     ['Duitsland', 'Frankrijk', 'Italië', 'Spanje', 'Holland', 'Oostenrijk', 'Europa']]
-
-  let helpLabel = ['ayuda', 'Hilfe', 'help', 'aider', 'helpen' ]
-
-  let help = [['Esta app le permitira buscar coches en un pais y realizar la misma busqueda en otro pais. esta pensada para comparar' + 
-  ' precios de autos similares en distintos paises de Europa, solo utilice la interfaz de autoscout 24 para filtrar su busqueda y vera '+ 
-  ' instantaneamente la comparacion con el pais elegido'],
-
-  ['Mit dieser App können Sie nach Autos in einem Land suchen und dieselbe Suche in einem anderen Land durchführen.' + 
-  'Es wurde entwickelt, um die Preise ähnlicher Autos in verschiedenen europäischen Ländern zu vergleichen. Verwenden Sie einfach die ' + 
-  'autoscout 24-Oberfläche, um Ihre Suche zu filtern, und Sie sehen sofort den Vergleich mit dem ausgewählten Land.'],
-
-  ['help', 'This app will allow you to search for cars in one country and carry out the same search in another country. It is designed to compare '+
-  'Similar car prices in different European countries, just use the autoscout 24 interface to filter your search and you will see' +
-  'instantly the comparison with the chosen country'],
-
-  [`Cette application vous permettra de rechercher des voitures dans un pays et d'effectuer la même recherche dans un autre pays. Il est conçu pour comparer '+
-  'Prix de voitures similaires dans différents pays européens, utilisez simplement l'interface autoscout 24 pour filtrer votre recherche et vous verrez' +
-  'instantanément la comparaison avec le pays choisi`],
   
-  [`Met deze app kun je naar auto's in het ene land zoeken en dezelfde zoekopdracht in een ander land uitvoeren. Het is ontworpen om '+
-  'Vergelijkbare autoprijzen in verschillende Europese landen, gebruik gewoon de autoscout 24-interface om je zoekopdracht te filteren en je ziet' +
-  'direct de vergelijking met het gekozen land`]]
+  
 
-  let chosenCountryMenu = menuCountry1[1]
-
-
-
-
-  // and load the index.html of the app.
+  // load and reload  of the windows.
   const reload = () => { mainWindow1.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=${countrySearchChoice}&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
   
   
@@ -132,17 +208,18 @@ function createWindow () {
 
   contents.on('did-navigate-in-page', event =>{
     mainWindow2.loadURL((contents.getURL()).replace('cy=D', 'cy=E'))
-    mainWindow2.setTitle('sasa')
-    mainWindow1.setTitle("sssd")
+  
   })
 
 
-  mainWindow1.webContents.on('did-start-loading', ()=>{
-    mainWindow1.setTitle("aass")
+  //setting tittles
+
+  mainWindow1.webContents.on('did-finish-load', ()=>{
+    mainWindow1.setTitle(win1mens)
   })
 
-  mainWindow2.webContents.on('did-start-loading', ()=>{
-    mainWindow2.setTitle("ss")
+  mainWindow2.webContents.on('did-finish-load', ()=>{
+    mainWindow2.setTitle(win2mens)
   })
 
 
@@ -150,72 +227,15 @@ function createWindow () {
 
   const template = [
     { 
-      label: 'Go back',
+      label: backTag,
       click: ()=>{
         contents.goBack();
+        console.log(helptag)
       }
      
     },
     {
-      label: 'Language',
-      submenu: [
-        { 
-          label: 'Español',
-          click: () => {
-             language = 'es'
-             chosenCountryMenu = menuCountry1[0]
-              menu = Menu.buildFromTemplate(template)
-
-              Menu.setApplicationMenu(menu)
-             
-
-
-            reload();
-      
-         }
-        },
-       
-        {label: 'Deutsche',
-        click: () => {
-          language = 'de'
-          chosenCountryMenu = menuCountry1[1]
-          
-
-          reload();
-
-
-        }},
-        {
-          label: 'English',
-        click: () => {
-          language = 'com'
-          chosenCountryMenu = menuCountry1[2]
-          
-            reload();
-        }
-      },
-
-        {label: 'Frace',
-        click: () => {
-          language = 'fr'
-          chosenCountryMenu = menuCountry1[3]
-          reload();
-
-
-        }},
-        
-        {label: 'Nederlands',
-        click: () => {
-          language = 'nl'
-          chosenCountryMenu = menuCountry1[4]
-          reload();
-
-
-        }}
-      ]
-    },
-    {
-      label: 'look for cars in',
+      label: findCarsTag ,
       submenu: [
         {label: chosenCountryMenu[0],
           click: ()=> {
@@ -269,7 +289,7 @@ function createWindow () {
       ]
     },
     {
-      label: 'Compare in',
+      label: compareCars,
       submenu: [
         {label: chosenCountryMenu[0],
           click: ()=> {
@@ -321,6 +341,13 @@ function createWindow () {
           }
         }
       ]
+    },
+    {
+     label: helpTag,
+     click : ()=>{
+       popUpShow();
+     } 
+     
     }
 
 
@@ -337,7 +364,7 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  createWindow1()
+  -  createWindow1()
 
 
   
