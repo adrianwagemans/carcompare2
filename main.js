@@ -4,6 +4,7 @@ const { url } = require('inspector')
 const path = require('path')
 const { title } = require('process')
 const { dialog, remote} = require('electron')
+const fs = require('fs')
 
 
 
@@ -137,9 +138,7 @@ let win1 = ''
 let autoWin1 = ''
 
 
-  //translatePage
-
- 
+  
 
 //help popUp
 
@@ -206,16 +205,63 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-  const translatePage = () => {
-  let html1 = mainWindow1.webContents.on('did-finish-load', async () => {
-    mainWindow1.webContents.savePage('./HTMLtranslate.html', 'HTMLonly').then(() => {
-      console.log('Page was saved successfully.')
-    }).catch(err => {
-      console.log(err)
-    })
-  })
+  
 
-}
+  //translatePage
+
+  const translatePage = () => {
+
+    mainWindow1.webContents.savePage('./description', 'HTMLOnly')
+    console.log('Page was saved successfully.')
+
+    const fileContents = fs.readFileSync('./description').toString()
+    let start = fileContents.search('data-type="description">');
+    let finish = fileContents.search('<div class="gradient"></div>');
+  
+    let  cont = fileContents.slice(start, finish)
+
+    let str = cont.replaceAll(/<[^>]*>/g, "");
+    console.log(str)
+
+    /*fs.readFile('./description', function (err, data) {
+
+      const regex = /(?:type=.description..)([\s\S]*?)(?:..div.
+        .div class=.gradient....div.)
+        /gm;
+      if (err) throw err;
+      if(data.match(/(?:type=.description..)([\s\S]*?)(?:..div..div class=.gradient....div.) /gm){
+       console.log(dat)
+      }
+    );*/
+
+
+   }
+    /*mainWindow1.webContents.savePage('./description', 'HTMLOnly')
+    console.log('Page was saved successfully.')
+
+
+    fs.readFile('./description', function (err, data) {
+      if (err) throw err;
+      if(data.includes('description')){
+       console.log(data)
+      }
+    });
+
+
+
+
+  }*/
+  
+  
+  /*const translatePage = () => {
+    const html =     '<script src="./renderer.js"></script>';
+
+    mainWindow1.webContents.savePage('./description.html', 'HTMLOnly' + encodeURI(html))
+      console.log('Page was saved successfully.')
+      
+
+    }*/
+  
   
   
   
