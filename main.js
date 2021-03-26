@@ -16,7 +16,8 @@ ipcMain.on('click', () => {
   
   setTimeout(function(){
     
-   setTimeout(function() {win1.close()},200)
+   setTimeout(function() {
+     win1.close()},200)
     createWindow()
    
   
@@ -32,7 +33,7 @@ ipcMain.on('click', () => {
 
 //options language menu, and tittle
 
-let countrySearch = ['D','F','I','E','NL','A','']
+  let countrySearch = ['D','F','I','E','NL','A','']
 
 
   let countrySearchChoice = countrySearch[0]
@@ -49,7 +50,8 @@ let countrySearch = ['D','F','I','E','NL','A','']
  let  menu= [
              ['Atras', 'Zurück', 'Go Back', 'Retour', 'Terug'],
              ['Buscar autos en',"Autos finden in",'Find cars in','Trouver des voitures dans','Vind autos in'],
-             ['Comparar con','Vergleichen mit','Compare with','Comparer avec','Vergelijken met']
+             ['Comparar con','Vergleichen mit','Compare with','Comparer avec','Vergelijken met'],
+             ['Traducir descripción del coche','Fahrzeugbeschreibung übersetzen','Translate car description','Traduire la description de la voiture','Vertaal autobeschrijving']
             ]
 
 console.log(menu[0][0])
@@ -106,6 +108,7 @@ let backTag = ''
 let findCarsTag = ''
 let compareCars = ''
 let win1 = ''
+let translateTag = ''
 
 
   ipcMain.on('request-mainprocess-action', (event, arg) => {
@@ -130,6 +133,7 @@ let win1 = ''
 
     compareCars = menu[2][arg[1]]
 
+    translateTag = menu[3][arg[1]]
 
   }
   )
@@ -149,12 +153,6 @@ let autoWin1 = ''
 });
   
    
-  
-
-
-
-
-
 function createWindow1 () {
 
     // Create the welcome window
@@ -176,13 +174,11 @@ function createWindow1 () {
 
     Menu.setApplicationMenu(menu)
     win1 = mainWindow
-
-
-      
-
   
 }
     
+
+
 
 
 function createWindow () {
@@ -221,53 +217,29 @@ function createWindow () {
     let  cont = fileContents.slice(start, finish)
 
     let str = cont.replaceAll(/<[^>]*>/g, "");
-    console.log(str)
-  }, 200)}
+    
 
-    /*fs.readFile('./description', function (err, data) {
 
-      const regex = /(?:type=.description..)([\s\S]*?)(?:..div.
-        .div class=.gradient....div.)
-        /gm;
-      if (err) throw err;
-      if(data.match(/(?:type=.description..)([\s\S]*?)(?:..div..div class=.gradient....div.) /gm){
-       console.log(dat)
+    // new window google translate 
+
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
+        contextIsolation: false,
       }
-    );*/
-
-
-   
-    /*mainWindow1.webContents.savePage('./description', 'HTMLOnly')
-    console.log('Page was saved successfully.')
-
-
-    fs.readFile('./description', function (err, data) {
-      if (err) throw err;
-      if(data.includes('description')){
-       console.log(data)
-      }
-    });
-
-
-
-
-  }*/
+    })
   
-  
-  /*const translatePage = () => {
-    const html =     '<script src="./renderer.js"></script>';
+    mainWindow.loadURL(`https://translate.google.com/?hl=es&sl=auto&tl=${language === 'com' ? 'en': language }&text=${str}&op=translate`)
 
-    mainWindow1.webContents.savePage('./description.html', 'HTMLOnly' + encodeURI(html))
-      console.log('Page was saved successfully.')
-      
-
-    }*/
-  
-  
-  
-  
+  }, 200)
+}
 
   // load and reload  of the windows.
+
+
   const reload = () => { mainWindow1.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=${countrySearchChoice}&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
   
   
@@ -275,15 +247,19 @@ function createWindow () {
                         }
         reload();
   
+
+
+  //setting tittles
+
+
   const contents = mainWindow1.webContents
+
 
   contents.on('did-navigate-in-page', event =>{
     mainWindow2.loadURL((contents.getURL()).replace('cy=D', 'cy=E'))
   
   })
 
-
-  //setting tittles
 
   mainWindow1.webContents.on('did-finish-load', ()=>{
     mainWindow1.setTitle(win1mens)
@@ -301,12 +277,12 @@ function createWindow () {
       label: backTag,
       click: ()=>{
         contents.goBack();
-        console.log(helptag)
+        
       }
      
     },
     {
-      label: findCarsTag ,
+      label: findCarsTag,
       submenu: [
         {label: chosenCountryMenu[0],
           click: ()=> {
@@ -414,7 +390,7 @@ function createWindow () {
       ]
     },
     {
-      label: 'translate page',
+      label: translateTag,
       click: ()=>{
         translatePage();
 
