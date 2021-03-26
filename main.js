@@ -214,14 +214,15 @@ function createWindow () {
     mainWindow1.webContents.savePage('./description', 'HTMLOnly')
     console.log('Page was saved successfully.')
 
-    const fileContents = fs.readFileSync('./description').toString()
-    let start = fileContents.search('data-type="description">');
+    setTimeout(()=>{ const fileContents = fs.readFileSync('./description').toString()
+    let start = fileContents.search('<div data-type="description">');
     let finish = fileContents.search('<div class="gradient"></div>');
   
     let  cont = fileContents.slice(start, finish)
 
     let str = cont.replaceAll(/<[^>]*>/g, "");
     console.log(str)
+  }, 200)}
 
     /*fs.readFile('./description', function (err, data) {
 
@@ -235,7 +236,7 @@ function createWindow () {
     );*/
 
 
-   }
+   
     /*mainWindow1.webContents.savePage('./description', 'HTMLOnly')
     console.log('Page was saved successfully.')
 
