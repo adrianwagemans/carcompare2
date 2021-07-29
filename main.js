@@ -157,8 +157,8 @@ function createWindow1 () {
 
     // Create the welcome window
     const mainWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 1500,
+      height: 1200,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
@@ -186,8 +186,10 @@ function createWindow () {
 
   // Create the principal windows
   const mainWindow1 = new BrowserWindow({
-    width: 1600,
+    width: 1050,
     height: 1200,
+    x:0,
+    y:0,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -195,8 +197,10 @@ function createWindow () {
 
  
   const mainWindow2 = new BrowserWindow({
-    width: 600,
-    height: 800,
+    width: 800,
+    height: 1200,
+    x:1150,
+    y:0,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -245,7 +249,7 @@ function createWindow () {
   
                          mainWindow2.loadURL(`https://www.autoscout24.${language}/lst/bmw/118?sort=price&desc=0&ustate=N%2CU&size=20&page=1&cy=${countryCompareChoice}&kmto=150000&fregto=2016&fregfrom=2009&atype=C&`)
                         }
-        reload();
+       reload();
   
 
 
@@ -255,8 +259,8 @@ function createWindow () {
   const contents = mainWindow1.webContents
 
 
-  contents.on('did-navigate-in-page', event =>{
-    mainWindow2.loadURL((contents.getURL()).replace('cy=D', 'cy=E'))
+   contents.on('did-navigate-in-page', event =>{
+   mainWindow2.loadURL((contents.getURL()).replace(`cy=${countrySearchChoice}`, `cy=${countryCompareChoice}`))
   
   })
 
@@ -265,9 +269,9 @@ function createWindow () {
     mainWindow1.setTitle(win1mens)
   })
 
-  mainWindow2.webContents.on('did-finish-load', ()=>{
+    mainWindow2.webContents.on('did-finish-load', ()=>{
     mainWindow2.setTitle(win2mens)
-  })
+ })
 
 
   //menu
